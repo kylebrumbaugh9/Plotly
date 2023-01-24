@@ -66,9 +66,6 @@ function buildCharts(sample) {
 
     
     // Deliverable 1: 4. Create a variable that filters the samples for the object with the desired sample number. 
-    //In Step 4, create a variable that will hold an array that contains all the data from the new sample that is chosen from the dropdown menu.
-    //To retrieve the data from the new sample, filter the variable created in Step 3 for the sample id that matches the new sample id chosen from the dropdown menu
-    //and passed into the buildCharts() function as the argument.
    
     var filteredSample = samplesArray.filter(sampleObj => sampleObj.id == sample);
     console.log(filteredSample);
@@ -85,9 +82,9 @@ function buildCharts(sample) {
     var otu_ids = firstSample.otu_ids
     var otu_labels = firstSample.otu_labels
     var sample_values = firstSample.sample_values
-    console.log(otu_ids)
-    console.log(otu_labels)
-    console.log(sample_values)
+    //console.log(otu_ids)
+    //console.log(otu_labels)
+    //console.log(sample_values)
 
 
 
@@ -98,37 +95,63 @@ function buildCharts(sample) {
     // Hint: Get the the top 10 otu_ids and map them in descending order 
     // so the otu_ids with the most bacteria are last. 
     
-    var otu_idsSorted = otu_ids.sort((a,b) => b.sample_values - a.samplevalues);
+    var otu_idsSorted = otu_ids.sort((a,b) => a.sample_values - b.samplevalues);
     console.log(otu_idsSorted)
 
-    var yticks = otu_idsSorted.slice(0, 10);
-    console.log(yticks)
+    var otuIdsSortedSliced = otu_idsSorted.slice(0, 10);
+    console.log(otuIdsSortedSliced) 
 
     // Deliverable 1: 8. Create the trace for the bar chart. 
     var traceBar = {
       x: sample_values,
-      y: yticks,
-      text: "OTU Labels",
+      y: otuIdsSortedSliced,
+      text: otu_labels,
       type: "bar",
-      orientation: "h"
-
+      orientation: "h",
     }
     
     var barData = [traceBar];
 
     // Deliverable 1: 9. Create the layout for the bar chart. 
     var barLayout = {
-      title: "Top 10 Bacteria Cultures Found"
+      title: "Top 10 Bacteria Cultures Found", 
+      yaxis: {
+        type: "category",
+        tickmode: "array",
+        //ticktext: "OTU" + `${otuIdsSortedSliced}`, this isn't working for some reason
+        tickvals: otuIdsSortedSliced,
+        categoryorder: "min ascending"
+      
+      }
     };
 
     // Deliverable 1: 10. Use Plotly to plot the data with the layout. 
     Plotly.newPlot("bar", barData, barLayout)
     // Deliverable 2: 1. Create the trace for the bubble chart.
+    var traceBubble = {
+      x: otu_ids,
+      y: sample_values,
+      mode: "markers",
+      marker:{
+        color: otu_ids,
+        size: sample_values
+      },
+      text: otu_labels
 
+
+    }
+    var bubbleData = [traceBubble]
     // Deliverable 2: 2. Create the layout for the bubble chart.
-
+    var bubbleLayout =  {
+      title: "Bacteria Cultures Per Sample",
+      xaxis: {
+        title: "OTU ID"
+      },
+      hovermode: "closest"
+    }
     // Deliverable 2: 3. Use Plotly to plot the data with the layout.
-    
+        Plotly.newPlot("bubble", bubbleData, bubbleLayout)
+
     // Deliverable 3: 4. Create the trace for the gauge chart.
     
     // Deliverable 3: 5. Create the layout for the gauge chart.
