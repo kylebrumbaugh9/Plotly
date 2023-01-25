@@ -1,0 +1,10 @@
+body {
+
+    color: hsl(236, 100%, 51%);
+    font-family: "Lucida Console", "Courier New", monospace;
+  }
+.jumbotron {
+  background-image: url("https://media.istockphoto.com/id/547214854/photo/human-tummy-and-belly-button.jpg?s=612x612&w=0&k=20&c=GhwMoy3otxOQOgMF28op9Vo1l1HI9FVOhjzEGqKBzKQ=");
+  background-size: 100% 100%;
+  text-align: center;
+}
