@@ -75,10 +75,10 @@ function buildCharts(sample) {
     
     // Deliverable 3: 1. Create a variable that filters the metadata array for the object with the desired sample number.
     var metadataArray = data.metadata;
-    console.log(metadataArray)
+    //console.log(metadataArray)
     
     var filteredMetadata = metadataArray.filter(sampleObj => sampleObj.id == sample);
-    console.log(filteredMetadata)
+    //console.log(filteredMetadata)
 
     // Deliverable 1: 5. Create a variable that holds the first sample in the array.
     var firstSample = filteredSample[0]
@@ -86,7 +86,7 @@ function buildCharts(sample) {
 
     // Deliverable 3: 2. Create a variable that holds the first sample in the metadata array.
     var firstMetadata = filteredMetadata[0]
-    console.log(firstMetadata)
+    //console.log(firstMetadata)
 
     // Deliverable 1: 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var otu_ids = firstSample.otu_ids
@@ -97,7 +97,6 @@ function buildCharts(sample) {
     //console.log(sample_values)
 
 
-
     // Deliverable 3: 3. Create a variable that holds the washing frequency.
     var washingFrequency = firstMetadata.wfreq
     //console.log(washingFrequency)
@@ -105,18 +104,16 @@ function buildCharts(sample) {
     // Deliverable 1: 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order 
     // so the otu_ids with the most bacteria are last. 
-    
-    var otu_idsSorted = otu_ids.sort((a,b) => a.sample_values - b.samplevalues);
-    //console.log(otu_idsSorted)
+    var labels = otu_labels.slice(0,10).reverse()
 
-    var otuIdsSortedSliced = otu_idsSorted.slice(0, 10);
-    //console.log(otuIdsSortedSliced) 
+    var yticks = otu_ids.sort((a,b) => a.sample_values - b.samplevalues).slice(0,10).map(otuID => `OTU ${otuID}`).reverse();
+    //console.log(yticks)
 
     // Deliverable 1: 8. Create the trace for the bar chart. 
     var traceBar = {
-      x: sample_values,
-      y: otuIdsSortedSliced,
-      text: otu_labels,
+      x: sample_values.slice(0,10).reverse(),
+      y: yticks,
+      text: labels.slice(0,10),
       type: "bar",
       orientation: "h",
     }
@@ -125,16 +122,16 @@ function buildCharts(sample) {
 
     // Deliverable 1: 9. Create the layout for the bar chart. 
     var barLayout = {
-      title: "Top 10 Bacteria Cultures Found", 
-      yaxis: {
-        type: "category",
-        tickmode: "array",
-        //ticktext: "OTU" + `${otuIdsSortedSliced}`, this isn't working for some reason
-        tickvals: otuIdsSortedSliced,
-        categoryorder: "min ascending"
+      title: "Top 10 Bacteria Cultures Found" 
+      // yaxis: {
+      //   type: "category",
+      //   tickmode: "array",
+      //   //ticktext: "OTU" + `${otuIdsSortedSliced}`, this isn't working for some reason
+      //   tickvals: otuIdsSortedSliced,
+      //   categoryorder: "min ascending"
       
-      }
-    };
+      };
+    
 
     // Deliverable 1: 10. Use Plotly to plot the data with the layout. 
     Plotly.newPlot("bar", barData, barLayout)
@@ -171,6 +168,8 @@ function buildCharts(sample) {
       type:"indicator",
       mode: "gauge+number",
       gauge: {
+        axis: { range: [null,10]}, 
+        bar: { color: "black"}, 
         steps: [
           {range:[0, 2], color: "red"},
           {range:[2, 4], color: "orange"},
@@ -194,3 +193,15 @@ function buildCharts(sample) {
   });
 
 };
+
+
+
+// var barData = [
+//   {
+//     y: yticks,
+//     x: sample_values.slice(0, 10).reverse(),
+//     text: otu_labels.slice(0, 10).reverse(),
+//     type: "bar",
+//     orientation: "h",
+//   }
+// ];
